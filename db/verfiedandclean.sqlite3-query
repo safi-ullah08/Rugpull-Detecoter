@@ -1,0 +1,15 @@
+-- database: ./db_launched.sqlite
+-- Use the ▷ button in the top right corner to run the entire file.
+SELECT
+    *
+FROM
+    tokens
+WHERE
+    naiveV2RemoveLiq = 0
+    AND naiveV3RemoveLiq = 0
+    AND shallowRemoveLiq = 0
+    AND naiveSelfDestruct = 0
+    AND shallowRemoveLiq = 0
+    AND shallowSelfDestruct = 0
+    AND contractVerifed = 1
+    AND signatureScam = 0;
