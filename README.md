@@ -36,32 +36,58 @@
 This memecoin can be found here https://dexscreener.com/base/0x2075f6E2147d4AC26036C9B4084f8E28b324397d and verified via the db folder sepecifly the db_positions database
 
 The transactions by the bot can be seen here https://dexscreener.com/base/0x2075f6E2147d4AC26036C9B4084f8E28b324397d?maker=0xB1fd45010bCCd32F304A1b707D0B188a2369436e
+# ⚙️ How It Works
 
-# How does it work 
+## Live Blockchain Scanning
+We perform real-time lookups directly on the blockchain, capturing token mint transactions on the Uniswap protocol.
 
-I implemented a realtime look up system that reads the data off the bloacks and filters the transactions for token mints on the Uniswap protocol
+## Initial Filters
 
-The way I filter it is that I check if the contract is an ERC20 or not and if it is there any liquidity attached to it i.e on Uniswap
+ERC-20 Compliance: Verify if the token is a valid ERC-20 contract.
 
-Then I do a walletAudit i.e looking for patterns in the transactions that would lead me to beleive that this a rugger who has deployed this contract
+Liquidity Check: Confirm whether the token has active liquidity pools on Uniswap (V2 or V3).
 
-All incoming tokens are then stored in the launched db if they clear the audit they move to clean launch if they have liqudity then a transaction takes place and the move into the positon db
+## Wallet Audit
+Once a token passes the above filters, we run a comprehensive wallet audit on the deployer:
 
+Analyze past transaction patterns.
 
-# What Pattern do I look for
+Detect behaviors indicative of known scammers.
 
-One of the most interesting one is self desturct where the scammer basicly after depositing the money into a smart contract calls self destruct which if looking on blockchain explorer doesn't allow you to see his previous behaviors
+Check for links to prior scams or malicious contracts.
 
-Others including linking where they will basicly nest there transactions say they scam using wallet A then that money goes to wallet B which then goes wallet C and so on unitl it reaches wallet F to scam again 
+## Database Routing
+Based on the audit:
 
-Regardless of these hiding tactics the one thing that is always constant is the rugging 
+Tokens passing the audit are stored in the clean_launch database.
 
-There are three ways to rug
-1. Call RemoveLiquidity on uniswap V2
-2. Call RemoveLiquidity in uniswap V3
-3. Or have a function that mints more than the actual supply 
+Tokens with liquidity and passing audits move to the position database (i.e., eligible for tracking or investment).
 
-If you want to find a rugger you need to look for these in there tranasction history which makes it extreamly hard for them to avoid dection chain hoping can be one way to do this but that too can be account for in this system
+Tokens flagged during audits remain in the launched database for further analysis.
+
+# 🕵️ Patterns We Detect
+1. Self-Destruct Tactics
+Scammers may call selfdestruct on their contract after a rug to erase traceable behaviors on explorers, hiding their deployment and activity history.
+
+2. Linked Wallets
+Fraudsters obfuscate their behavior through transaction relays:
+
+Wallet A (scam) → Wallet B → Wallet C → ... → Wallet F (scam again)
+Despite this nesting, the rugging behavior remains traceable through deeper pattern recognition.
+
+# 💣 How Rug Pulls Happen
+There are three core rug pull mechanisms this system is designed to detect:
+
+removeLiquidity() on Uniswap V2
+
+removeLiquidity() on Uniswap V3
+
+Unauthorized Minting:
+
+Custom functions that mint more tokens than the declared supply.
+
+All of these leave an on-chain trace, making them detectable through historical transaction analysis—even if scammers switch chains or addresses.
+
 
 
 
