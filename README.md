@@ -32,7 +32,7 @@
   2 × (Precision × Recall) / (Precision + Recall)  
   = 2 × (0.3333 × 1.0) / (0.3333 + 1.0) = 0.50 (50%)
 
-# The true positive ran to 15 Million USD (IF ONLY I WASNT JUST F***ING TESTING XD)
+# The true positive ran to 15 Million USD (IF ONLY I WASNT JUST TESTING XD)
 This memecoin can be found here https://dexscreener.com/base/0x2075f6E2147d4AC26036C9B4084f8E28b324397d and verified via the db folder sepecifly the db_positions database
 
 The transactions by the bot can be seen here https://dexscreener.com/base/0x2075f6E2147d4AC26036C9B4084f8E28b324397d?maker=0xB1fd45010bCCd32F304A1b707D0B188a2369436e
