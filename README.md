@@ -3,6 +3,8 @@
 
 ### This bot has a 99.95% Accuracy of detecting rugpulls on base chain just by looking at a few transactions 
 
+### Compared to traditional tools this has perfomed substantially better https://arxiv.org/abs/2403.16082 -> 73% Accuracy 
+
 ## System Performance
 
 ### Confusion Matrix
