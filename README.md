@@ -41,7 +41,7 @@ The transactions by the bot can be seen here https://dexscreener.com/base/0x2075
 # ⚙️ How It Works
 
 ## Live Blockchain Scanning
-We perform real-time lookups directly on the blockchain, capturing token mint transactions on the Uniswap protocol.
+I perform real-time lookups directly on the blockchain, capturing token mint transactions on the Uniswap protocol.
 
 ## Initial Filters
 
@@ -50,7 +50,7 @@ ERC-20 Compliance: Verify if the token is a valid ERC-20 contract.
 Liquidity Check: Confirm whether the token has active liquidity pools on Uniswap (V2 or V3).
 
 ## Wallet Audit
-Once a token passes the above filters, we run a comprehensive wallet audit on the deployer:
+Once a token passes the above filters, I run a comprehensive wallet audit on the deployer:
 
 Analyze past transaction patterns.
 
@@ -67,7 +67,7 @@ Tokens with liquidity and passing audits move to the position database (i.e., el
 
 Tokens flagged during audits remain in the launched database for further analysis.
 
-# 🕵️ Patterns We Detect
+# 🕵️ Patterns I Detect
 1. Self-Destruct Tactics
 Scammers may call selfdestruct on their contract after a rug to erase traceable behaviors on explorers, hiding their deployment and activity history.
 
