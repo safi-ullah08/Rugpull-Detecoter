@@ -1,97 +1,114 @@
-# RUGPULL DETECTION BASED TRADING BOT
+# Rugpull Detecoter
+
+Detects rugpulls on Base chain with ~99% accuracy by inspecting transaction patterns and smart contract behavior.
+
+---
+
+## 🧾 Features
+
+- Real-time blockchain scanning to catch suspicious token deployments  
+- ERC-20 compliance & liquidity checks  
+- Wallet auditing & behavioral analysis  
+- Pattern detection for rugpull tactics: liquidity removal, unauthorized minting, linked wallets, self-destruct  
+- Database routing: classifies tokens into clean, launched, or flagged  
+
+---
+
+## 📂 Project Structure
+
+Rugpull-Detecoter/  
+&nbsp;&nbsp;&nbsp;&nbsp;.vscode/  
+&nbsp;&nbsp;&nbsp;&nbsp;abis/  
+&nbsp;&nbsp;&nbsp;&nbsp;db/  
+&nbsp;&nbsp;&nbsp;&nbsp;creatorWalletAnalysis.js  
+&nbsp;&nbsp;&nbsp;&nbsp;example.env  
+&nbsp;&nbsp;&nbsp;&nbsp;lookup.js  
+&nbsp;&nbsp;&nbsp;&nbsp;moniterPositions.js  
+&nbsp;&nbsp;&nbsp;&nbsp;moniterTrade.js  
+&nbsp;&nbsp;&nbsp;&nbsp;out.sql  
+&nbsp;&nbsp;&nbsp;&nbsp;package.json  
+&nbsp;&nbsp;&nbsp;&nbsp;package-lock.json  
+&nbsp;&nbsp;&nbsp;&nbsp;securityChecks.js  
+&nbsp;&nbsp;&nbsp;&nbsp;trade.js  
+&nbsp;&nbsp;&nbsp;&nbsp;README.md  
 
 
-### This bot has a 99.95% Accuracy of detecting rugpulls on base chain just by looking at a few transactions 
+---
 
-### Compared to traditional tools this has perfomed substantially better https://arxiv.org/abs/2403.16082 -> 73% Accuracy 
+## 📈 System Performance
 
-## System Performance
+**Confusion Matrix**
 
-### Confusion Matrix
-
-|                       | Predicted Positive | Predicted Negative | Total  |
-|:---------------------:|:------------------:|:------------------:|:------:|
-| **Actual Positive**   | 1 (TP)             | 0 (FN)             | 1      |
-| **Actual Negative**   | 2 (FP)             | 6,711 (TN)         | 6,713  |
-| **Total**             | 3                  | 6,711              | 6,714  |
-
+|               | Predicted Positive | Predicted Negative | Total |
+|---------------|---------------------|---------------------|-------|
+| Actual Positive | 1                 | 0                   | 1     |
+| Actual Negative | 2                 | 6,711               | 6,713 |
+| **Total**       | 3                 | 6,711               | 6,714 |
 
 ### Key Metrics
 
-- **Accuracy**  
-  (TP + TN) / Total = (1 + 6,711) / 6,714 ≈ 0.99970 (99.97%)
+- Accuracy: (TP + TN) / Total ≈ 0.99970 (99.97%)  
+- Precision: TP / (TP + FP) = 1 / (1 + 2) = 0.3333 (33.33%)  
+- Recall: TP / (TP + FN) = 1 / (1 + 0) = 1.00 (100%)  
+- F₁ Score = 0.50  
 
-- **Precision** (Positive Predictive Value)  
-  TP / (TP + FP) = 1 / (1 + 2) = 0.3333 (33.33%)
+> The true positive corresponded to a ~\$15 million token rugpull (this was a test case).  
 
-- **Recall** (Sensitivity / True Positive Rate)  
-  TP / (TP + FN) = 1 / (1 + 0) = 1.00 (100%)
+---
 
-- **Specificity** (True Negative Rate)  
-  TN / (TN + FP) = 6,711 / (6,711 + 2) ≈ 0.99970 (99.97%)
+## ⚙️ How It Works
 
-- **F₁ Score**  
-  2 × (Precision × Recall) / (Precision + Recall)  
-  = 2 × (0.3333 × 1.0) / (0.3333 + 1.0) = 0.50 (50%)
+### Live Blockchain Scanning  
+Tracks token mint events on Uniswap protocol on Base chain.
 
-# The true positive ran to 15 Million USD (IF ONLY I WASNT JUST TESTING!!)
-This memecoin can be found here https://dexscreener.com/base/0x2075f6E2147d4AC26036C9B4084f8E28b324397d and verified via the db folder sepecifly the db_positions database
+### Initial Filters  
+- Ensures tokens are valid ERC-20  
+- Verifies if liquidity exists in Uniswap pools  
 
-The transactions by the bot can be seen here https://dexscreener.com/base/0x2075f6E2147d4AC26036C9B4084f8E28b324397d?maker=0xB1fd45010bCCd32F304A1b707D0B188a2369436e
-# ⚙️ How It Works
+### Wallet Audit  
+Runs behavioral and historical analyses on deployer wallets to detect known scam patterns, including relayed transactions across multiple addresses.
 
-## Live Blockchain Scanning
-I perform real-time lookups directly on the blockchain, capturing token mint transactions on the Uniswap protocol.
+### Database Routing  
+- **clean_launch**: passes all filters  
+- **position**: tokens with liquidity & safe audits  
+- **launched**: flagged or suspicious tokens  
 
-## Initial Filters
+### Rugpull Tactics Detected  
+1. `removeLiquidity()` on Uniswap V2 & V3  
+2. Unauthorized minting beyond declared supply  
+3. Self-destruct calls to erase contract trace  
+4. Linked wallet relays used to obfuscate flows  
 
-ERC-20 Compliance: Verify if the token is a valid ERC-20 contract.
+---
 
-Liquidity Check: Confirm whether the token has active liquidity pools on Uniswap (V2 or V3).
+## ✅ Usage / Setup
 
-## Wallet Audit
-Once a token passes the above filters, I run a comprehensive wallet audit on the deployer:
+1. Set up `.env` (see `example.env`) with correct RPC endpoints, DB credentials, etc.  
+2. Run necessary migrations or load `out.sql` into your database.  
+3. Use scripts like `lookup.js`, `moniterTrade.js`, `moniterPositions.js` to scan or analyze tokens.  
+4. Incorporate `securityChecks.js` for validating suspicious behavior.  
+5. Use `trade.js` for trade simulations / monitoring.
 
-Analyze past transaction patterns.
+---
 
-Detect behaviors indicative of known scammers.
+## 🔒 Limitations & Notes
 
-Check for links to prior scams or malicious contracts.
+- Precision is low (many false positives) despite very high accuracy  
+- Detection is based on heuristics and on-chain patterns — not foolproof  
+- Requires access to database & full blockchain data  
+- Performance & resource consumption depend on scan rate and DB optimizations  
 
-## Database Routing
-Based on the audit:
+---
 
-Tokens passing the audit are stored in the clean_launch database.
+## 📜 License
 
-Tokens with liquidity and passing audits move to the position database (i.e., eligible for tracking or investment).
+MIT  
 
-Tokens flagged during audits remain in the launched database for further analysis.
+---
 
-# 🕵️ Patterns I Detect
-1. Self-Destruct Tactics
-Scammers may call selfdestruct on their contract after a rug to erase traceable behaviors on explorers, hiding their deployment and activity history.
+## 🙌 Acknowledgements
 
-2. Linked Wallets
-Fraudsters obfuscate their behavior through transaction relays:
-
-Wallet A (scam) → Wallet B → Wallet C → ... → Wallet F (scam again)
-Despite this nesting, the rugging behavior remains traceable through deeper pattern recognition.
-
-# 💣 How Rug Pulls Happen
-There are three core rug pull mechanisms this system is designed to detect:
-
-removeLiquidity() on Uniswap V2
-
-removeLiquidity() on Uniswap V3
-
-Unauthorized Minting:
-
-Custom functions that mint more tokens than the declared supply.
-
-All of these leave an on-chain trace, making them detectable through historical transaction analysis—even if scammers switch chains or addresses.
-
-
-
-
-
+Project by [@safi-ullah08](https://github.com/safi-ullah08)  
+Inspired by academic & open-source approaches in on-chain fraud detection  
+If you find this helpful, feel free to ⭐ the repo or open issues/PRs!  
 
