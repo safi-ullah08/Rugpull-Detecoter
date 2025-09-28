@@ -93,7 +93,8 @@ Runs behavioral and historical analyses on deployer wallets to detect known scam
 
 ## 🔒 Limitations & Notes
 
-- Precision is low (many false positives) despite very high accuracy  
+- Precision is low (many false positives) despite very high accuracy
+- Performance is subject to Market conditions i.e better results for TPs (True Positives) when overall market is bullish
 - Detection is based on heuristics and on-chain patterns — not foolproof  
 - Requires access to database & full blockchain data  
 - Performance & resource consumption depend on scan rate and DB optimizations  
