@@ -52,7 +52,7 @@ Rugpull-Detecoter/
 - Recall: TP / (TP + FN) = 1 / (1 + 0) = 1.00 (100%)  
 - F₁ Score = 0.50  
 
-> The true positive corresponded to a ~\$15 million token rugpull (this was a test case).  
+> The true positive corresponded to a ~\$15 million token 
 
 ---
 
